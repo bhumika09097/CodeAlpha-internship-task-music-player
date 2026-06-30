@@ -98,14 +98,50 @@ const songs = [
         }
 ]
 
+const playlist = document.getElementById("playlist");
+function renderPlaylist() {
+
+    playlist.innerHTML = "";
+
+    songs.forEach((song, index) => {
+
+        const li = document.createElement("li");
+
+        li.innerHTML = `
+            <img src="${song.image}" class="playlist-img">
+
+            <div class="details">
+                <h4>${song.title}</h4>
+                <p>${song.artist}</p>
+            </div>
+
+            <span class="play-icon">▶</span>
+        `;
+
+        li.addEventListener("click", () => {
+            currentSong = index;
+            loadSong(currentSong);
+            audio.play();
+            playBtn.textContent = "⏸";
+        });
+        playlist.appendChild(li);
+    });
+}
+
 function loadSong(index) {
     audio.src = songs[index].src;
     title.textContent = songs[index].title;
     artist.textContent = songs[index].artist;
     cover.src = songs[index].image;
+
+    document.querySelectorAll("#playlist li").forEach((item,i)=>{
+
+        item.classList.toggle("active",i===index);
+    })
 }
 
 let currentSong = 0;
+renderPlaylist()
 loadSong(currentSong)
 
 const nextBtn = document.getElementById("next")
@@ -145,6 +181,9 @@ audio.addEventListener("ended", () => {
     loadSong(currentSong);
     audio.play();
 });
+
+
+
 
 
 
